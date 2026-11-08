@@ -34,7 +34,7 @@ import { usePiSession } from "./use-pi-session";
 import "./styles.css";
 
 const SESSION_KEY = "pi-harness-session";
-const MODEL = "opencode/muse-spark-1.3";
+const MODEL = "opencode-go/muse-spark-1.3-contributor";
 /** How close to the bottom (px) still counts as "at the bottom". */
 const BOTTOM_THRESHOLD = 32;
 

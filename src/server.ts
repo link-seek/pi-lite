@@ -1,6 +1,6 @@
 import { DurableObject } from "cloudflare:workers";
 import { createModels, type CredentialStore } from "@earendil-works/pi-ai/models";
-import { opencodeProvider } from "@earendil-works/pi-ai/providers/opencode";
+import { opencodeGoProvider } from "@earendil-works/pi-ai/providers/opencode-go";
 import { createRegistry, Harness } from "@earendil-works/pi-durable";
 import type { ToolRegistration } from "@earendil-works/pi-durable";
 import { obj, str } from "@earendil-works/pi-schema";
@@ -11,14 +11,14 @@ import { createAI } from "agents/models/pi-ai";
 import { WebSockets } from "agents/websockets";
 import { PiSessionSockets } from "./sockets";
 
-const MODEL_ID = "muse-spark-1.3";
+const MODEL_ID = "muse-spark-1.3-contributor";
 
 // Module-scope collection just to build the static model reference for
 // PiHarness defaults. Request-time auth comes from the factory collection's
 // credential store (wired to the worker secret OPENCODE_API_KEY).
 const opencodeModels = createModels();
-opencodeModels.setProvider(opencodeProvider());
-const DEFAULT_MODEL = opencodeModels.getModel("opencode", MODEL_ID);
+opencodeModels.setProvider(opencodeGoProvider());
+const DEFAULT_MODEL = opencodeModels.getModel("opencode-go", MODEL_ID);
 
 const PREAMBLE =
   "You are a concise management assistant for a team gateway. You triage requests, coordinate follow-ups, and hand heavy work (code changes, builds, tests) to the CI pipeline instead of doing it inline. Use tools whenever they can answer the request, and explain their results plainly.";
@@ -68,13 +68,13 @@ export class PiAgent extends DurableObject<Env> {
   // A stored credential owns its provider: env lookup is skipped.
   readonly credentials: CredentialStore = {
     read: async (providerId: string) =>
-      providerId === "opencode" && this.env.OPENCODE_API_KEY
+      providerId === "opencode-go" && this.env.OPENCODE_API_KEY
         ? { type: "api_key", key: this.env.OPENCODE_API_KEY }
         : undefined,
     list: async () => [],
     modify: async (providerId: string, fn: (current: unknown) => unknown) =>
       fn(
-        providerId === "opencode" && this.env.OPENCODE_API_KEY
+        providerId === "opencode-go" && this.env.OPENCODE_API_KEY
           ? { type: "api_key", key: this.env.OPENCODE_API_KEY }
           : undefined
       ),
@@ -89,7 +89,7 @@ export class PiAgent extends DurableObject<Env> {
         tools: [currentTime, dispatchToPipeline]
       });
       const models = createModels({ credentials: this.credentials });
-      models.setProvider(opencodeProvider());
+      models.setProvider(opencodeGoProvider());
       models.setProvider(this.ai.provider);
       return Harness.open(
         storage,
