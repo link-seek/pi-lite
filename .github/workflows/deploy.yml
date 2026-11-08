@@ -27,7 +27,7 @@ jobs:
       - name: smoke test
         run: |
           for i in 1 2 3 4 5 6; do
-            code=$(curl -s -o /tmp/smoke.json -w "%{http_code}" --max-time 20 https://pi-lite.delicate-dawn-probe.workers.dev/api/session) && break || sleep 10
+            code=$(curl -s -o /tmp/smoke.json -w "%{http_code}" --max-time 20 https://pi-lite.linkseek.net.cn/api/session) && break || sleep 10
           done
           echo "http=$code"; cat /tmp/smoke.json
           test "$code" = "200"

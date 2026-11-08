@@ -23,6 +23,7 @@
       "new_sqlite_classes": ["PiAgent"]
     }
   ],
+  "routes": [{ "pattern": "pi-lite.linkseek.net.cn", "custom_domain": true }],
   "observability": {
     "enabled": true
   }
