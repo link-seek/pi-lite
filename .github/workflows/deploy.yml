@@ -23,6 +23,8 @@ jobs:
 
       - run: pnpm install --no-frozen-lockfile
       - run: pnpm run build
+      - name: set model secret
+        run: printf '%s' "${{ secrets.OPENCODE_API_KEY }}" | pnpm exec wrangler secret put OPENCODE_API_KEY
       - run: pnpm exec wrangler deploy
       - name: smoke test
         run: |
