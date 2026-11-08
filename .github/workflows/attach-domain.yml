@@ -1,0 +1,17 @@
+name: attach-domain
+
+on:
+  workflow_dispatch:
+
+jobs:
+  attach:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: attach custom domain
+        env:
+          CF_TOKEN: ${{ secrets.CF_PARENT_TOKEN }}
+        run: |
+          curl -s -X POST -H "Authorization: Bearer $CF_TOKEN" -H "Content-Type: application/json" \
+            "https://api.cloudflare.com/client/v4/accounts/47ce24ced58f17c9fb15351adcbe67d4/workers/domains" \
+            --data '{"hostname":"pi-lite.linkseek.net.cn","service":"pi-lite"}'
