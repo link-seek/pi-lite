@@ -10,7 +10,7 @@ import { createAI } from "agents/models/pi-ai";
 import { WebSockets } from "agents/websockets";
 import { PiSessionSockets } from "./sockets";
 
-const MODEL_ID = "@cf/zai-org/glm-5.3-flash";
+const MODEL_ID = "@cf/meta/llama-3.1-8b-instruct-fp8";
 
 const PREAMBLE =
   "You are a concise management assistant for a team gateway. You triage requests, coordinate follow-ups, and hand heavy work (code changes, builds, tests) to the CI pipeline instead of doing it inline. Use tools whenever they can answer the request, and explain their results plainly.";
